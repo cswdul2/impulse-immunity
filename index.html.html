@@ -1,0 +1,751 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>XGIPAM 임펄스내성 시험 ±2kv 10분인가 시 HMI-주처리간 통신단절 후 Service facility 안내창 팝업 디버깅</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
+
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content-wrapper {
+	overflow-x: auto;
+}
+
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	gap: 46px;
+}
+
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.column > *:first-child {
+	margin-top: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
+
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2f7c9110-097b-8069-9e52-e0c398c9af3c" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">⚡</span></div><h1 class="page-title" dir="auto">XGIPAM 임펄스내성 시험 ±2kv 10분인가 시 HMI-주처리간 통신단절 후 Service facility 안내창 팝업 디버깅</h1><p class="page-description" dir="auto"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><img src="https://www.notion.so/icons/user_gray.svg" style="width:14px;height:14px;display:block"/></span>Main Donor</th><td></td></tr><tr class="property-row property-row-relation"><th><span class="icon property-icon"><img src="https://www.notion.so/icons/arrow-up_gray.svg" style="width:14px;height:14px;display:block"/></span>상위 항목</th><td><a href="https://www.notion.so/New-XGIPAM-3-0147e13f138541b0870a2be0251e69ab?pvs=21">New XGIPAM 확장모듈 3종 개발</a></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><img src="https://www.notion.so/icons/friends_gray.svg" style="width:14px;height:14px;display:block"/></span>Partner</th><td></td></tr><tr class="property-row property-row-created_time"><th><span class="icon property-icon"><img src="https://www.notion.so/icons/clock_gray.svg" style="width:14px;height:14px;display:block"/></span>생성 일시</th><td><time>2026년 1월 30일 오전 12:18</time></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><img src="https://www.notion.so/icons/list_gray.svg" style="width:14px;height:14px;display:block"/></span>태그</th><td><span class="selected-value select-value-color-blue">DV</span><span class="selected-value select-value-color-yellow">EMC</span><span class="selected-value select-value-color-pink">문제해결</span><span class="selected-value select-value-color-red">시스템</span></td></tr></tbody></table></header><div class="page-body"><div style="display:contents" dir="ltr"><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="313c9110-097b-8036-b473-cee66e19a167"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%"><div style="display:contents" dir="auto"><h2 id="313c9110-097b-8083-9c16-e45187d149b3" class="">이슈 : </h2></div><div style="display:contents" dir="auto"><h3 id="313c9110-097b-80cf-b793-e2c3fd4a53b4" class="">임펄스 2kv, 10분, ZCT 교체후 I0 포인트 인가 시 service facility 팝업 이후 여타 조작 불능</h3></div><div style="display:contents" dir="auto"><h2 id="313c9110-097b-8096-82a0-fe293095768b" class="">현상</h2></div><div style="display:contents" dir="auto"><div id="313c9110-097b-8029-a665-c3e516438d86" class="column-list"><div style="display:contents" dir="auto"><div id="313c9110-097b-809d-981b-e998431f7ee5" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="313c9110-097b-80e0-99b1-c84c37e5d97b" class="image"><a href="4121a211-b2cb-432b-b20d-c6c92d794620.png"><img style="width:409.6px" src="4121a211-b2cb-432b-b20d-c6c92d794620.png"/></a></figure></div></div></div><div style="display:contents" dir="auto"><div id="313c9110-097b-80bb-9dec-cd870cb34518" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="313c9110-097b-803a-9769-d875d000b34b" class="image"><a href="61a0b5fc-75a7-4253-8634-95c32ef9f6d3.png"><img style="width:402.2258592471359px" src="61a0b5fc-75a7-4253-8634-95c32ef9f6d3.png"/></a></figure></div></div></div><div style="display:contents" dir="auto"><div id="313c9110-097b-80f7-93f7-dfaef65df9dc" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="313c9110-097b-8095-8b1f-c87dde22cc74" class="image"><a href="302dcd65-3e0e-4c7d-ac0c-2dac9c9efa35.png"><img style="width:445.47563805104414px" src="302dcd65-3e0e-4c7d-ac0c-2dac9c9efa35.png"/></a></figure></div></div></div></div></div></div></figure></div><div style="display:contents" dir="auto"><h2 id="2f7c9110-097b-8091-abf2-cf1eadb4f673" class="block-color-blue_background">1. 임펄스 노이즈 내성 디버깅 활동이력</h2></div><div style="display:contents" dir="ltr"><div id="2f7c9110-097b-802e-8a1c-fccafabe883f" class="collection-content"><h4 class="collection-title"></h4><div class="collection-content-wrapper"><table class="collection-content"><colgroup><col style="width:12.112036336109009%"/><col style="width:15.14004542013626%"/><col style="width:21.725965177895535%"/><col style="width:20.741862225586676%"/><col style="width:15.14004542013626%"/><col style="width:15.14004542013626%"/></colgroup><thead><tr><th><span class="icon property-icon"><img src="https://www.notion.so/icons/font_gray.svg" style="width:14px;height:14px;display:block"/></span>제목</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/report_gray.svg" style="width:14px;height:14px;display:block"/></span>발생이슈</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/pill_gray.svg" style="width:14px;height:14px;display:block"/></span>디버깅활동</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/sliders-horizontal_gray.svg" style="width:14px;height:14px;display:block"/></span>시료 외 기타구성</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/following_gray.svg" style="width:14px;height:14px;display:block"/></span>조치결과/검증</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/photo-landscape_gray.svg" style="width:14px;height:14px;display:block"/></span>참고이미지</th></tr></thead><tbody><tr id="2f7c9110-097b-80ed-b491-e4612e6d3080"><td class="cell-title"><a href="https://www.notion.so/2f7c9110097b80edb491e4612e6d3080?pvs=21">구분</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}"><strong>주요 모듈 구성 (전기적)</strong></td><td class="cell-FXPF"><strong>기구 및 기타 변경 사항 (물리적)</strong></td><td class="cell-c&lt;uL"><strong>테스트 결과</strong></td><td class="cell-iN^S"></td></tr><tr id="2f7c9110-097b-80c3-86fd-cd5be9083e77"><td class="cell-title"><a href="https://www.notion.so/1-2f7c9110097b80c386fdcd5be9083e77?pvs=21">시료구성 #1</a></td><td class="cell-;JO&gt;">임펄스 ±2kv, 10분, CTP보드 I0 에 인가시 L1-L2 간 facility service 팝업.</td><td class="cell-UYH}">• 이더넷 불능 Comm모듈 (가짜 옴론커넥터) <br/> • DSP 모듈변경 (ZCT 변경) <br/> • 나머지 모듈 모두 <code>기존 60Hz EMC 시료</code> 조립</td><td class="cell-FXPF">• <strong>내함 나사머리 돌출 조립 (그라운딩강화)<br/> </strong> • Comm 모듈과 랩탑간 통신안되는 버전</td><td class="cell-c&lt;uL"><strong>OK</strong></td><td class="cell-iN^S"></td></tr><tr id="2f7c9110-097b-8075-8d99-cb59c91a2dc3"><td class="cell-title"><a href="https://www.notion.so/2-2f7c9110097b80758d99cb59c91a2dc3?pvs=21">시료구성 #2</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}">• <strong>주처리(Main) 모듈 교체</strong> <br/> • DSP 모듈변경 (ZCT 변경) <br/> • 나머지 모듈 모두 <code>기존 60Hz EMC 시료</code> 조립<br/>(RE 조치된 Comm 모듈 사용)</td><td class="cell-FXPF">• 외함 안쪽 도장 제거 (Conductive)<br/> • <strong>PCB FG 가이드 재부착</strong></td><td class="cell-c&lt;uL"><strong>Unstable</strong><br/>(1차: OK / 2차: Fail)</td><td class="cell-iN^S"></td></tr><tr id="2f7c9110-097b-808c-816d-c020897464e9"><td class="cell-title"><a href="https://www.notion.so/3-2f7c9110097b808c816dc020897464e9?pvs=21">시료구성 #3</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}">• DSP 모듈변경 (ZCT 변경) <br/> • 나머지 모듈 모두 <code>기존 60Hz EMC 시료</code> 원복<br/>(RE 조치된 Comm 모듈 포함)</td><td class="cell-FXPF">• 베이스-HMI 간 랜선/전원선 <strong>Ferrite Core 추가</strong></td><td class="cell-c&lt;uL"><mark class="highlight-pink"><strong>FAIL</strong></mark></td><td class="cell-iN^S"></td></tr><tr id="2f7c9110-097b-809e-9015-f6208d61ab2a"><td class="cell-title"><a href="https://www.notion.so/4-2f7c9110097b809e9015f6208d61ab2a?pvs=21">시료구성 #4</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}">• <strong>시료구성 #3과 동일</strong> <br/> (DSP모듈 ZCT 변경 + 나머지 모듈 모두 <code>기존 60Hz EMC 시료</code>로 모두 원복<br/>(RE 조치된 Comm 모듈 포함)</td><td class="cell-FXPF">• Comm모듈과 랩탑간 <strong>LAN 케이블 분리 (Open)</strong> <br/> • 전원선 Ferrite Core 유지</td><td class="cell-c&lt;uL">1차 /2차 : OK</td><td class="cell-iN^S"></td></tr><tr id="2f8c9110-097b-80e2-8275-f9c78cdf9e28"><td class="cell-title"><a href="https://www.notion.so/2f8c9110097b80e28275f9c78cdf9e28?pvs=21">제목 없음</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}"></td><td class="cell-FXPF">•  Comm모듈과 랩탑간 <strong>LAN 케이블 연결</strong>. But <mark class="highlight-pink"><strong>Ping 은 중지.</strong></mark></td><td class="cell-c&lt;uL">1차 /2차 : OK</td><td class="cell-iN^S"></td></tr><tr id="310c9110-097b-8049-a45e-cf1e2f6b7209"><td class="cell-title"><a href="https://www.notion.so/5-310c9110097b8049a45ecf1e2f6b7209?pvs=21">시료구성 #5</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}">  • 시료구성 #3 조건 下,<br/>  • <mark class="highlight-yellow_background"><code><strong><span style="border-bottom:0.05em solid">R10 과 R9 를 추가</span></strong></code></mark>하여 DGND-FG간 브릿지 구성. (위에 2개, 아래2개,<br/>  • R10 과 R9 측 FG에 <code><strong>쿠션패드</strong></code> 적용</td><td class="cell-FXPF">  • Ferrite core 도 원복 (ZCAT173)</td><td class="cell-c&lt;uL"><mark class="highlight-pink"><mark class="highlight-yellow_background"><strong><span style="border-bottom:0.05em solid">  • I0, 2kv 10분 임펄스내성시험 통과</span></strong></mark></mark></td><td class="cell-iN^S"><span style="margin-inline-end:6px"><a href="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-02-26_110142.png"><img style="width:20px;max-height:24px" src="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-02-26_110142.png" alt="화면 캡처 2026-02-26 110142.png"/></a></span></td></tr><tr id="310c9110-097b-8008-b95f-dea0971d319b"><td class="cell-title"><a href="https://www.notion.so/6-310c9110097b8008b95fdea0971d319b?pvs=21">시료구성 #6</a></td><td class="cell-;JO&gt;">✅이후부터는 <mark class="highlight-pink"><strong>임펄스 전압을 2.2kv </strong></mark>로 상향하여 시험.<br/>I0 단 임펄스시험은 통과하였으나 <mark class="highlight-pink"><mark class="highlight-yellow_background"><strong><span style="border-bottom:0.05em solid">CT 일괄시험 Fail</span></strong></mark></mark>. service facility 팝업은 사라졌고 의도대로 재부팅됨.</td><td class="cell-UYH}">  • 시료구성 #3 조건 下,<br/>  • 통신모듈은 신규제작된 (OSC출력에 병렬 CAP 10pF 달린) 장착<br/>  • <mark class="highlight-blue"><strong><span style="border-bottom:0.05em solid">R7, R8 , R9 제거</span></strong></mark><br/>  • <mark class="highlight-yellow_background"><code><strong><span style="border-bottom:0.05em solid">R10만 남김 (1점 접지)</span></strong></code></mark></td><td class="cell-FXPF"></td><td class="cell-c&lt;uL">  • <mark class="highlight-pink"><mark class="highlight-yellow_background"><strong><span style="border-bottom:0.05em solid">CT A 상 시험 Pass (26.02.23)<br/>  • CT A,B,C 상 시험 Pass<br/>  • ZCT I0 시험 Pass</span></strong></mark></mark></td><td class="cell-iN^S"><span style="margin-inline-end:6px"><a href="%EA%B7%B8%EB%A6%BC1.png"><img style="width:20px;max-height:24px" src="%EA%B7%B8%EB%A6%BC1.png" alt="그림1.png"/></a></span></td></tr><tr id="312c9110-097b-8028-9ccc-f2b3122075ab"><td class="cell-title"><a href="https://www.notion.so/7-312c9110097b80289cccf2b3122075ab?pvs=21">시료구성 #7</a></td><td class="cell-;JO&gt;">  • I0 와 CT 일괄 임펄스내성은 Pass 하였으나<mark class="highlight-pink"><mark class="highlight-yellow_background"><strong> <br/>  • PT일괄시험 재부팅발생</strong></mark></mark></td><td class="cell-UYH}">Q: 주처리-hmI간 이더넷라인이, 내함접지판으로 부터 방사파 간섭을 받는가 ?<br/>⇒<mark class="highlight-pink"><strong>HMI 를 본체로부터 분리</strong></mark>하여 앞으로 이격. </td><td class="cell-FXPF"></td><td class="cell-c&lt;uL">HMI 를 GIPAM 본체로부터 이격하였으나 고장증상개선없음</td><td class="cell-iN^S"><span style="margin-inline-end:6px"><a href="image2.png"><img style="width:20px;max-height:24px" src="image2.png" alt="image2.png"/></a></span></td></tr><tr id="312c9110-097b-804a-8e48-f73f8f7cbd8f"><td class="cell-title"><a href="https://www.notion.so/8-312c9110097b804a8e48f73f8f7cbd8f?pvs=21">시료구성 #8</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}">HMI-주처리간<mark class="highlight-pink"><strong> ferrite 고주파대역 core</strong></mark> 삽입</td><td class="cell-FXPF"></td><td class="cell-c&lt;uL">효과없음</td><td class="cell-iN^S"></td></tr><tr id="313c9110-097b-80f8-8933-ed53d928c2b0"><td class="cell-title"><a href="https://www.notion.so/313c9110097b80f88933ed53d928c2b0?pvs=21">제목 없음</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}">제품하부 접지용 <mark class="highlight-pink"><strong>핑거 3개</strong></mark> 삽입</td><td class="cell-FXPF"></td><td class="cell-c&lt;uL">효과없음</td><td class="cell-iN^S"></td></tr><tr id="313c9110-097b-807d-84d6-d958a1bb24fb"><td class="cell-title"><a href="https://www.notion.so/313c9110097b807d84d6d958a1bb24fb?pvs=21">제목 없음</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}">제품과 임펄스기기간 <mark class="highlight-pink"><strong>노후접지선 수선</strong></mark></td><td class="cell-FXPF"></td><td class="cell-c&lt;uL">효과없음</td><td class="cell-iN^S"></td></tr><tr id="313c9110-097b-802f-b2f2-d26aad636f5c"><td class="cell-title"><a href="https://www.notion.so/9-313c9110097b802fb2f2d26aad636f5c?pvs=21">시료구성 #9</a></td><td class="cell-;JO&gt;"></td><td class="cell-UYH}">시료구성 #6 (보드하부<mark class="highlight-pink"><strong><span style="border-bottom:0.05em solid"> Bottom 면에 R10</span></strong></mark> 저항만 남기고 모든 브리지 0Ω 저항제거)+ 보드상부 <mark class="highlight-pink"><strong><span style="border-bottom:0.05em solid">Top 면에</span></strong></mark> 커퍼를 긁어서 0Ω 한개 연결</td><td class="cell-FXPF"></td><td class="cell-c&lt;uL">CT 일괄 Pass<br/>PT 일괄 Pass</td><td class="cell-iN^S"><span style="margin-inline-end:6px"><a href="image.png"><img style="width:20px;max-height:24px" src="image.png" alt="image.png"/></a></span><span style="margin-inline-end:6px"><a href="image1.png"><img style="width:20px;max-height:24px" src="image1.png" alt="image1.png"/></a></span></td></tr><tr id="318c9110-097b-801e-8593-d51991375c13"><td class="cell-title"><a href="https://www.notion.so/10-318c9110097b801e8593d51991375c13?pvs=21">시료구성 #10</a></td><td class="cell-;JO&gt;">  • ZCT L1-PE간 -2.2kv fail.<br/>  • CT일괄 L1-L2간 -2.2kv fail</td><td class="cell-UYH}"><mark class="highlight-pink"><mark class="highlight-pink_background"><strong><span style="border-bottom:0.05em solid">[3kv 로 올려서</span></strong></mark></mark> 재현 및 조치 유효성 검증]  <br/>• CPT 보드 DGND-FG 간 브리지<mark class="highlight-pink"><mark class="highlight-yellow_background"><strong><span style="border-bottom:0.05em solid"> 0Ω 저항을 전부 Top 면으로 이동. </span></strong></mark></mark>(via 임피던스 회피)</td><td class="cell-FXPF"></td><td class="cell-c&lt;uL">  1. CT일괄 ±3kv, L1-PE/L2-PE/L1-L2 통과<br/>  2. ZCT ±3kv, L1-PE/L2-PE/L1-L2 통과<br/>  3. PT 일괄  ±3kv, L1-PE/L2-PE/L1-L2 통과<br/>  4. 제어전원 L1-PE/L2-PE/L1-L2/L2-L1 ±2kv 10분, 3kv 1분시험 통과<br/>  5. DI / DO <br/>  6. 아나로그회로<br/>  7. 통신회로</td><td class="cell-iN^S"><span style="margin-inline-end:6px"><a href="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-03-03_225217.png"><img style="width:20px;max-height:24px" src="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-03-03_225217.png" alt="화면 캡처 2026-03-03 225217.png"/></a></span><span style="margin-inline-end:6px"><a href="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-03-03_225203.png"><img style="width:20px;max-height:24px" src="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-03-03_225203.png" alt="화면 캡처 2026-03-03 225203.png"/></a></span><span style="margin-inline-end:6px"><a href="%EA%B7%B8%EB%A6%BC1%201.png"><img style="width:20px;max-height:24px" src="%EA%B7%B8%EB%A6%BC1%201.png" alt="그림1.png"/></a></span></td></tr></tbody></table></div><br/><br/></div></div><div style="display:contents" dir="auto"><h2 id="2f7c9110-097b-8036-9284-cb7d98394ee6" class="block-color-blue_background">2. 시험자 인터뷰 (Failure Mode 분석)</h2></div><div style="display:contents" dir="auto"><p id="2f7c9110-097b-809c-863d-e10b9f888bb5" class="">테스트 진행 시 관측된 구체적인 실패 양상. <strong>시간 경과(열적 요인 또는 전하 축적)가</strong> 주요 변수.</p></div><div style="display:contents" dir="auto"><ul id="2f7c9110-097b-802a-96d2-f2ea3daf2643" class="bulleted-list"><li style="list-style-type:disc"><strong>Short-term (1분):</strong> ±3kV 강도에서도 <strong>OK</strong> (내성 있음)</li></ul></div><div style="display:contents" dir="auto"><ul id="2f7c9110-097b-8094-9c11-d9911f94af2e" class="bulleted-list"><li style="list-style-type:disc"><strong>Long-term (10분):</strong> 10분 ±2kV 강도에서 <strong>문제 발생</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="2f7c9110-097b-8029-9ad9-cdb216aeff07" class="bulleted-list"><li style="list-style-type:disc"><strong>특이사항:</strong> I0 (누설전류 등) 측정, 8가지 결선의 impulse 시험에서 멈추거나 오동작하는 경향 확인</li></ul></div><div style="display:contents" dir="auto"><hr id="2f7c9110-097b-802a-b175-dadddbcb7613"/></div><div style="display:contents" dir="auto"><h2 id="2f7c9110-097b-8011-8181-e9a0fa8b63b2" class="block-color-blue_background">3. 차후 디버깅 Action Plan</h2></div><div style="display:contents" dir="ltr"><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="2f9c9110-097b-80e2-936a-d9a7ea8be5ca"><div style="font-size:1.5em"><img class="icon" src="https://cdn-icons-png.flaticon.com/128/9822/9822650.png"/></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="2f9c9110-097b-809e-bf5c-e616bbab473a" class=""><strong><span style="border-bottom:0.05em solid">최우선적으로 해 볼것</span></strong></p></div><div style="display:contents" dir="auto"><ul id="2f9c9110-097b-8053-9755-d502646e76c6" class="bulleted-list"><li style="list-style-type:disc">Comm 모듈과 랩탑간 연결 Lan 선에 Ferrite core, <code>Laird 사 28A0593-0A2</code> 삽입</li></ul></div><div style="display:contents" dir="auto"><ul id="2f9c9110-097b-801a-990c-f3c998a8807c" class="bulleted-list"><li style="list-style-type:disc">Comm 모듈 PCB 외곽 <code>ㄷ</code> 자형태 FG패턴→ <code>-</code> 자 형태로 변경하여 재시험</li></ul></div></div></figure></div><div style="display:contents" dir="auto"><ul id="2f7c9110-097b-80a3-a64c-c5d2e25afa07" class="bulleted-list"><li style="list-style-type:disc">노이즈 유입 경로 차단 및 원인 부품 격리를 위한 단계별 실행 계획.</li></ul></div><div style="display:contents" dir="ltr"><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="2f9c9110-097b-80e8-a8f4-f3d6d5c3c12e"><div style="font-size:1.5em"><img class="icon" src="https://cdn-icons-png.flaticon.com/128/12090/12090616.png"/></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="2f7c9110-097b-8017-9aca-dbbfd1c65d75" class=""><strong>A. 하드웨어 교체 (Swapping)</strong></p></div><div style="display:contents" dir="auto"><ol type="1" id="2f7c9110-097b-80c7-883e-fa98cc88cfa0" class="numbered-list" start="1"><li><strong>HMI 교체 :</strong> HMI 자체 내성 확인</li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="2f7c9110-097b-80a8-8a73-dba0e656df8e" class="numbered-list" start="2"><li><strong>HMI 랜선 교체 :</strong> 케이블 쉴딩 및 임피던스 이슈 확인</li></ol></div><div style="display:contents" dir="auto"><p id="2f7c9110-097b-8044-8e9e-edb03e0a3122" class=""><strong>B. 회로 및 부품 원복 (Revert)</strong><div class="indented"><div style="display:contents" dir="auto"><p id="2f8c9110-097b-8065-b2a9-eefc679ccb0d" class="">3. <strong>DSP 모듈 원복 :</strong> ZCT 변경 전 상태로 되돌려 비교</p></div><div style="display:contents" dir="auto"><p id="2f8c9110-097b-8065-9c4e-f6415d432da8" class="">4. <strong>통신모듈 OSC Shunt Cap 원복 :</strong> 클럭 라인(3개 출력단) 노이즈 필터링 영향 확인</p></div></div></p></div><div style="display:contents" dir="auto"><p id="2f7c9110-097b-80d5-a34e-e830758a28d6" class=""><strong>C. 접지 및 차폐 강화 (Grounding &amp; Shielding)</strong><div class="indented"><div style="display:contents" dir="auto"><p id="2f8c9110-097b-80c8-ac2e-d671d96e5c87" class="">5.  <strong>HMI 접지 연결 :</strong> HMI 섀시 그라운드 강화</p></div><div style="display:contents" dir="auto"><p id="2f8c9110-097b-80dd-94c2-f358be8b3841" class="">6.  <strong>EMI 차폐 :</strong> 노이즈 방사/유입 차단을 위한 추가 차폐재 적용</p></div></div></p></div><div style="display:contents" dir="auto"><p id="2f7c9110-097b-8031-874d-d23e5bb0b78d" class=""><strong>D. SW 로는 방비가 안될까 ? → </strong></p></div></div></figure></div><div style="display:contents" dir="auto"><h2 id="302c9110-097b-808b-9d3f-d1b2d832f9dc" class="block-color-blue_background">4. 유효성 검증완료 대책 (시료구성 #5)</h2></div><div style="display:contents" dir="ltr"><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="302c9110-097b-8023-b908-d033dd2b3e4a"><div style="font-size:1.5em"><span class="icon">✅</span></div><div style="width:100%"><div style="display:contents" dir="auto"><ul id="302c9110-097b-8055-9981-f6edbabb3205" class="bulleted-list"><li style="list-style-type:disc">CPT 보드의 I0 를 통해서 들어오는 노이즈가 FG 로 빠져나가는 대신 보다 임피던스가 작은 보드 GND 로 타고 들어옴.</li></ul></div><div style="display:contents" dir="auto"><ul id="302c9110-097b-8057-8dc5-ce34d309082d" class="bulleted-list"><li style="list-style-type:disc">따라서 아래처럼 노이즈가 FG 로 바로 빠져나갈수 있는 통로를 제공<div style="display:contents" dir="ltr"><figure id="302c9110-097b-80e3-af06-c2f0d5f0d16a" class="image" style="text-align:center"><a href="image%201.png"><img style="width:576px" src="image%201.png"/></a></figure></div></li></ul></div><div style="display:contents" dir="auto"><ul id="302c9110-097b-80c4-ace5-f9e5c8537ef4" class="bulleted-list"><li style="list-style-type:disc">3kv 에서도 문제없음 </li></ul></div><div style="display:contents" dir="ltr"><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="302c9110-097b-80b5-92dd-cc5f6a6775e6"><div style="font-size:1.5em"><span class="icon">🧐</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="302c9110-097b-80a7-b168-e3d5aa5fa950" class=""><strong>확인방법</strong></p></div><div style="display:contents" dir="auto"><p id="302c9110-097b-808d-b5be-cd8f86855556" class=""><code>기기정보 → 시각정보</code> 에서 초가 잘 가는지 확인 (주처리와 HMI 간 통신이 잘 되고있다는 증거)</p></div></div></figure></div></div></figure></div><div style="display:contents" dir="auto"><h2 id="310c9110-097b-8047-bfdd-e9e7f68d98b8" class="block-color-blue_background">5. (시료구성 #6) 26년2월23일, CT A 상 임펄스내성 2kv 10분 시험에서 Fail (재부팅 복구현상)디버깅</h2></div><div style="display:contents" dir="ltr"><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="310c9110-097b-8091-94de-eccec0f08560"><div style="font-size:1.5em"><span class="icon">✅</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="310c9110-097b-8029-9441-d1111c57dd82" class="">기존 R7, R8 을 제거하고 R10 만 남김. R9 도 제거하여 보드를 가로지르는 <code><strong>공진성 노이즈 차단</strong></code>하고 R10 을 통해서만 노이즈가 배출되도록 <strong><span style="border-bottom:0.05em solid">일점접지</span></strong> 함.</p></div></div></figure></div><div style="display:contents" dir="auto"><div id="312c9110-097b-8012-be6f-daaae1c29993" class="column-list"><div style="display:contents" dir="auto"><div id="312c9110-097b-8046-a666-e5fb179f2f3c" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="310c9110-097b-80f5-af9e-e50cf7704c9d" class="image"><a href="image%202.png"><img style="width:691.9940795898438px" src="image%202.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="312c9110-097b-80c7-9305-d85e510e12f9" class="">
+</p></div></div></div><div style="display:contents" dir="auto"><div id="312c9110-097b-8039-90c0-f619935982d2" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="310c9110-097b-801d-ad3b-e983f19b0c2f" class="image"><a href="image%203.png"><img style="width:691.9940795898438px" src="image%203.png"/></a><figcaption>&lt;26.02.23에는 Bottom 면에있는 R10만 연결했으나…아래처럼 Top 면에도 DGND-FG 브리지 저항을 연결하는게 낫겠다&gt;</figcaption></figure></div><div style="display:contents" dir="auto"><p id="312c9110-097b-8090-b380-c81cca80c287" class="">
+</p></div></div></div><div style="display:contents" dir="auto"><div id="312c9110-097b-8080-93b4-dd0d96f34d4b" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="313c9110-097b-80af-93c4-d8aa1a040092" class="image"><a href="image%204.png"><img style="width:475.3125305175781px" src="image%204.png"/></a></figure></div></div></div></div></div><div style="display:contents" dir="ltr"><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="312c9110-097b-80af-91d2-c530e511dbe4"><div style="font-size:1.5em"><span class="icon">❌</span></div><div style="width:100%"><div style="display:contents" dir="auto"><h2 id="312c9110-097b-8009-8c43-c86965b7c4e5" class="">임펄스 2.2kv 10분 시험, ZCT 와 CT 는 Pass 했으나 PT 시험중 재부팅발생. 아래부터 디버깅 이력. </h2></div><div style="display:contents" dir="ltr"><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="313c9110-097b-8091-abc8-df611a073fd9"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="313c9110-097b-8087-9471-f081e7fa71f5" class="">빠른 재현을 위해 시험전압을 2.2kv → 2.5kv 로 상향</p></div></div></figure></div></div></figure></div><div style="display:contents" dir="auto"><h2 id="312c9110-097b-8013-8ac7-f9c1287f3ed2" class="">6. (시료구성 #7) HMI 를 본체로 부터 이격</h2></div><div style="display:contents" dir="ltr"><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="312c9110-097b-80d8-bb16-cbf16140d62c"><div style="font-size:1.5em"><span class="icon">🤔</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="312c9110-097b-8005-97b7-cd47491dbbe9" class=""><mark class="highlight-blue_background">가설 : 주처리와 HMI 간 Lan선에 유기되는 방사파가 범인인가 ? 그렇다면 HMI 를 본체로 부터 물리적으로 이격시켜 Lan 선의 내함 알미늄샤시에 대한 접촉도룰 줄이면 증상이 호전 될 것이나 ⇒ [결과] 효과없음. 따라서 </mark><mark class="highlight-pink"><strong><span style="border-bottom:0.05em solid">방사노이즈는 원인아님.</span></strong></mark></p></div></div></figure></div><div style="display:contents" dir="auto"><h2 id="312c9110-097b-809a-91b9-ebe7f54b1148" class="">7. (시료구성 #8) 시료와 임펄스장비간 접지선 수선, Finger 내함 하부에 3EA 추가</h2></div><div style="display:contents" dir="auto"><div id="312c9110-097b-80e9-9f1d-ed50035cfff2" class="column-list"><div style="display:contents" dir="auto"><div id="312c9110-097b-80ab-a590-e2190170ef92" style="width:43.75%" class="column"><div style="display:contents" dir="ltr"><figure id="312c9110-097b-807f-938e-ef6bef640978" class="image"><a href="image%205.png"><img style="width:240px" src="image%205.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="313c9110-097b-80cd-8d46-de45b9e1569c" class="">
+</p></div></div></div><div style="display:contents" dir="auto"><div id="312c9110-097b-8007-ae76-dda4cbcf2dc2" style="width:56.25%" class="column"><div style="display:contents" dir="ltr"><figure id="312c9110-097b-80bb-80f0-c37670f1d8f5" class="image"><a href="image%206.png"><img style="width:314.97686767578125px" src="image%206.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="312c9110-097b-8041-87fc-c1c31748772e" class="">L2-PE  간 -2.2kv 10분 시험후 휴지기간 중 </p></div><div style="display:contents" dir="auto"><p id="312c9110-097b-80c6-9851-ec90a86a09a5" class="">
+</p></div></div></div></div></div><div style="display:contents" dir="auto"><h2 id="312c9110-097b-8011-a516-e9e3b310c817" class="">8. (시료구성 #9) CT 와 ZCT 전도노이즈 Sink 용 R10 만 연결 + PT 전도노이즈 Sink 용 Top 면에 패드 만들어서 0Ω 저항추가</h2></div><div style="display:contents" dir="auto"><div id="313c9110-097b-80ce-b2b2-f74083cf6f29" class="column-list"><div style="display:contents" dir="auto"><div id="313c9110-097b-8049-9065-df971a7b4ee5" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="313c9110-097b-800a-9a81-cd8c583275b2" class="image"><a href="image%207.png"><img style="width:444.2083435058594px" src="image%207.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="313c9110-097b-80b7-b4b6-cd2117092ff0" class="">
+</p></div></div></div><div style="display:contents" dir="auto"><div id="313c9110-097b-8082-b1aa-d14be90d933a" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="313c9110-097b-80de-8ee9-c392fb5b40d5" class="image"><a href="image%208.png"><img style="width:475.28936767578125px" src="image%208.png"/></a><figcaption>&lt;<mark class="highlight-pink"><strong><span style="border-bottom:0.05em solid">Bottom 면 R10 </span></strong></mark>조립&gt;</figcaption></figure></div></div></div><div style="display:contents" dir="auto"><div id="313c9110-097b-800c-836e-d9396c41dcec" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="313c9110-097b-8032-ba69-d0e672e7250b" class="image"><a href="image%209.png"><img style="width:444.2083435058594px" src="image%209.png"/></a><figcaption>&lt;<mark class="highlight-pink"><strong>Top 면 Rxxx 추가</strong></mark>조립&gt;</figcaption></figure></div></div></div></div></div><div style="display:contents" dir="ltr"><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="313c9110-097b-80d6-9a33-e79903db7f9b"><div style="font-size:1.5em"><span class="icon">✅</span></div><div style="width:100%"><div style="display:contents" dir="auto"><h2 id="313c9110-097b-806e-837a-f7e52d2f238d" class="">유효성 검증결과-조치효과 양호</h2></div><div style="display:contents" dir="auto"><h3 id="313c9110-097b-80fe-9e5f-e494a77bba05" class="">CT 일괄시험</h3></div><div style="display:contents" dir="auto"><ul id="313c9110-097b-80f7-ae9d-da3f04eec6cf" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-pink"><mark class="highlight-yellow_background"><strong><span style="border-bottom:0.05em solid">L1-PE, L2-PE, L1-L2,  모두 ±2.5kv</span></strong></mark></mark> 에서 동작 양호<div style="display:contents" dir="ltr"><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="313c9110-097b-8078-8f58-e4b5ef474b60"><div style="font-size:1.5em"><span class="icon">🤔</span></div><div style="width:100%"><div style="display:contents" dir="auto"><ul id="313c9110-097b-80ae-9955-cfab9a4437e9" class="bulleted-list"><li style="list-style-type:disc">L1-L2 때, 600초 (10분) 부터 1초씩 카운트다운하다가 570즘 되면 약 3초 마다 한 번씩 초를 건너뜀</li></ul></div><div style="display:contents" dir="auto"><ul id="313c9110-097b-8084-9f0c-cda873f64791" class="bulleted-list"><li style="list-style-type:disc">그러나 470 초 즘 되면 빼먹는거 없이 다시 시간이 카운트다운 잘 됨</li></ul></div></div></figure></div></li></ul></div><div style="display:contents" dir="auto"><h3 id="313c9110-097b-8079-a936-e74bb43baaa2" class="">PT 일괄시험</h3></div><div style="display:contents" dir="auto"><ul id="313c9110-097b-80d2-a233-cfdbcd328c62" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-pink"><mark class="highlight-yellow_background"><strong><span style="border-bottom:0.05em solid">L1-PE, L2-PE, L1-L2,  모두 ±2.5kv</span></strong></mark></mark> 에서 동작 양호<div style="display:contents" dir="ltr"><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="313c9110-097b-80fa-a626-fc122ccbc248"><div style="font-size:1.5em"><span class="icon">🤔</span></div><div style="width:100%"><div style="display:contents" dir="auto"><ul id="313c9110-097b-80af-9a1d-d70f6f1a7e3b" class="bulleted-list"><li style="list-style-type:disc">L1-L2 때, 600초 (10분) 부터 1초씩 카운트다운하다가 570즘 되면 약 3초 마다 한 번씩 초를 건너뜀</li></ul></div><div style="display:contents" dir="auto"><ul id="313c9110-097b-8055-a93b-c646e839a0a8" class="bulleted-list"><li style="list-style-type:disc">그러나 470 초 즘 되면 빼먹는거 없이 다시 시간이 카운트다운 잘 됨</li></ul></div></div></figure></div></li></ul></div></div></figure></div><div style="display:contents" dir="auto"><h2 id="318c9110-097b-8034-8cd1-d96b27bec5cd" class="">9. (시료구성 #10) </h2></div><div style="display:contents" dir="ltr"><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="318c9110-097b-8019-99d5-d73d9303ecd2"><div style="font-size:1.5em"><span class="icon">✅</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="318c9110-097b-809c-a23c-c50d927fd183" class="">[3kv 로 올려서 재현 및 조치 유효성 검증]</p></div><div style="display:contents" dir="auto"><p id="318c9110-097b-80c0-91c2-fd97518dfa8b" class="">• CPT 보드 DGND-FG 간 브리지 0Ω저항을 전부 Top 면으로 이동. (via 임피던스 회피)</p></div></div></figure></div><div style="display:contents" dir="auto"><div id="318c9110-097b-8062-a406-c8e81d574f9c" class="column-list"><div style="display:contents" dir="auto"><div id="318c9110-097b-80ce-b817-c025554e1dce" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="318c9110-097b-80b2-aa4d-c826b6a91bfd" class="image"><a href="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-03-03_225217%201.png"><img style="width:404.5520935058594px" src="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-03-03_225217%201.png"/></a></figure></div><div style="display:contents" dir="ltr"><figure id="321c9110-097b-80d4-9ed7-d04cf90a3623" class="image"><a href="image%2010.png"><img style="width:444.2083435058594px" src="image%2010.png"/></a></figure></div></div></div><div style="display:contents" dir="auto"><div id="318c9110-097b-8068-9823-fc60fff63cbe" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="318c9110-097b-8009-98dd-ddb37f150c09" class="image"><a href="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-03-03_225203%201.png"><img style="width:475.3009338378906px" src="%ED%99%94%EB%A9%B4_%EC%BA%A1%EC%B2%98_2026-03-03_225203%201.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="318c9110-097b-8015-bcea-f741b6d74365" class="">
+</p></div></div></div><div style="display:contents" dir="auto"><div id="318c9110-097b-808b-b66f-d4d7d2e4cbe9" style="width:33.33333333333333%" class="column"><div style="display:contents" dir="ltr"><figure id="318c9110-097b-800a-a8ca-e83241bbe6dc" class="image"><a href="%EA%B7%B8%EB%A6%BC1%202.png"><img style="width:253.2986297607422px" src="%EA%B7%B8%EB%A6%BC1%202.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="318c9110-097b-809b-82cd-f0134dcfff39" class="">
+</p></div></div></div></div></div><div style="display:contents" dir="auto"><p id="318c9110-097b-8004-8576-d79b8b431b83" class="">
+</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
